@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dapur Uti - Sambal Khas Rumahan, Rasa Autentik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.3);
+        }
+        
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.5);
+            z-index: 1000;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+        
+        .stats-number {
+            font-size: 3rem;
+            font-weight: 700;
+        }
+        
+        @media (max-width: 768px) {
+            .stats-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-orange-50">
+    
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/6281234567890" target="_blank" class="whatsapp-float">
+        <span>💬</span>
+    </a>
+    
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md fixed w-full top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="text-2xl font-bold gradient-text">🌶️ Dapur Uti</div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#home" class="text-gray-700 hover:text-orange-600 transition">Beranda</a>
+                    <a href="#products" class="text-gray-700 hover:text-orange-600 transition">Produk</a>
+                    <a href="#team" class="text-gray-700 hover:text-orange-600 transition">Tim</a>
+                    <a href="#invest" class="text-gray-700 hover:text-orange-600 transition">Investasi</a>
+                    <a href="#contact" class="text-gray-700 hover:text-orange-600 transition">Kontak</a>
+                </div>
+                <a href="#contact" class="gradient-bg text-white px-6 py-2 rounded-full hover:opacity-90 transition">
+                    Hubungi Kami
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section id="home" class="gradient-bg text-white pt-32 pb-20 px-4">
+        <div class="container mx-auto text-center">
+            <div class="floating text-8xl mb-6">🌶️</div>
+            <h1 class="text-5xl md:text-6xl font-bold mb-6">Dapur Uti</h1>
+            <p class="text-2xl md:text-3xl mb-8 font-light">Sambal Khas Rumahan, Rasa Autentik, Peluang Besar</p>
+            <p class="text-xl mb-10 max-w-2xl mx-auto">Membawa kembali cita rasa sambal tradisional Indonesia dengan resep turun-temurun dari tangan Ibu Lustiyana</p>
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <a href="#products" class="bg-white text-orange-600 px-8 py-4 rounded-full font-semibold hover:bg-orange-100 transition">
+                    Lihat Produk 🍽️
+                </a>
+                <a href="#invest" class="border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-orange-600 transition">
+                    Peluang Investasi 💰
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Problem Statement -->
+    <section class="py-20 px-4 bg-white">
+        <div class="container mx-auto">
+            <div class="max-w-4xl mx-auto fade-in">
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-12">
+                    <span class="gradient-text">Masalah yang Kami Lihat</span>
+                </h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="text-center p-6 bg-red-50 rounded-2xl">
+                        <div class="text-5xl mb-4">😞</div>
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Sambal Tidak Autentik</h3>
+                        <p class="text-gray-600">Produk sambal massal kehilangan sentuhan rumahan dan rasa asli nusantara</p>
+                    </div>
+                    <div class="text-center p-6 bg-red-50 rounded-2xl">
+                        <div class="text-5xl mb-4">🏭</div>
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Pengawet Berlebihan</h3>
+                        <p class="text-gray-600">Sambal komersial mengandung pengawet dan bahan kimia yang mengurangi kualitas</p>
+                    </div>
+                    <div class="text-center p-6 bg-red-50 rounded-2xl">
+                        <div class="text-5xl mb-4">📉</div>
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Kehilangan Tradisi</h3>
+                        <p class="text-gray-600">Generasi muda tidak lagi merasakan sambal tradisional seperti buatan nenek</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Solution -->
+    <section class="py-20 px-4 bg-orange-50">
+        <div class="container mx-auto">
+            <div class="max-w-5xl mx-auto fade-in">
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-12">
+                    <span class="gradient-text">Solusi Kami</span>
+                </h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-white p-8 rounded-2xl shadow-lg text-center">
+                        <div class="text-5xl mb-4">👵</div>
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Resep Turun-Temurun</h3>
+                        <p class="text-gray-600">Setiap sambal dibuat dengan resep warisan keluarga yang telah teruji puluhan tahun</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-lg text-center">
+                        <div class="text-5xl mb-4">🧪</div>
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Produksi Higienis</h3>
+                        <p class="text-gray-600">Standar kebersihan tinggi dengan sertifikasi PIRT dan proses produksi terkontrol</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-lg text-center">
+                        <div class="text-5xl mb-4">🗺️</div>
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Varian Nusantara</h3>
+                        <p class="text-gray-600">Menghadirkan berbagai varian sambal dari berbagai daerah di Indonesia</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Products -->
+    <section id="products" class="py-20 px-4 bg-white">
+        <div class="container mx-auto">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 fade-in">
+                <span class="gradient-text">Produk Unggulan</span>
+            </h2>
+            <p class="text-center text-gray-600 mb-12 text-lg fade-in">Tiga sambal terlaris yang dicintai pelanggan</p>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="product-card bg-gradient-to-br from-red-50 to-orange-50 rounded-2xl overflow-hidden shadow-lg fade-in">
+                    <div class="h-48 gradient-bg flex items-center justify-center text-8xl">🌶️</div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2 text-gray-800">Sambal Terasi Pedas</h3>
+                        <p class="text-gray-600 mb-4">Sambal klasik dengan terasi pilihan dan cabai merah segar. Pedas menggigit dengan aroma terasi yang khas.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-orange-600">Rp 25.000</span>
+                            <span class="text-sm text-gray-500">150ml</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card bg-gradient-to-br from-red-50 to-orange-50 rounded-2xl overflow-hidden shadow-lg fade-in">
+                    <div class="h-48 gradient-bg flex items-center justify-center text-8xl">🥥</div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2 text-gray-800">Sambal Matah Bali</h3>
+                        <p class="text-gray-600 mb-4">Sambal khas Bali dengan irisan bawang merah, serai, dan jeruk limau. Segar dan harum.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-orange-600">Rp 30.000</span>
+                            <span class="text-sm text-gray-500">150ml</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card bg-gradient-to-br from-red-50 to-orange-50 rounded-2xl overflow-hidden shadow-lg fade-in">
+                    <div class="h-48 gradient-bg flex items-center justify-center text-8xl">🌺</div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2 text-gray-800">Sambal Kecombrang</h3>
+                        <p class="text-gray-600 mb-4">Sambal eksotis dengan bunga kecombrang yang memberikan aroma dan rasa unik khas Sumatera.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-orange-600">Rp 35.000</span>
+                            <span class="text-sm text-gray-500">150ml</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Social Proof -->
+    <section class="py-20 px-4 gradient-bg text-white">
+        <div class="container mx-auto">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 fade-in">Dipercaya Ribuan Pelanggan</h2>
+            
+            <!-- Stats -->
+            <div class="grid md:grid-cols-3 gap-8 mb-16 max-w-4xl mx-auto fade-in">
+                <div class="text-center">
+                    <div class="stats-number gradient-text bg-white rounded-2xl py-4">150%</div>
+                    <p class="text-xl mt-4">Peningkatan Penjualan (2024)</p>
+                </div>
+                <div class="text-center">
+                    <div class="stats-number gradient-text bg-white rounded-2xl py-4">500+</div>
+                    <p class="text-xl mt-4">Pelanggan Setia</p>
+                </div>
+                <div class="text-center">
+                    <div class="stats-number gradient-text bg-white rounded-2xl py-4">4.9⭐</div>
+                    <p class="text-xl mt-4">Rating Pelanggan</p>
+                </div>
+            </div>
+            
+            <!-- Testimonials -->
+            <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <div class="bg-white bg-opacity-20 backdrop-blur p-6 rounded-2xl fade-in">
+                    <p class="text-lg mb-4 italic">"Sambal Terasi Dapur Uti benar-benar mengingatkan saya pada sambal buatan nenek. Rasanya autentik dan pedasnya pas!"</p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-orange-300 rounded-full flex items-center justify-center text-2xl mr-4">👨</div>
+                        <div>
+                            <p class="font-semibold">Budi Santoso</p>
+                            <p class="text-sm opacity-80">Pelanggan Setia, Jakarta</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white bg-opacity-20 backdrop-blur p-6 rounded-2xl fade-in">
+                    <p class="text-lg mb-4 italic">"Sebagai orang Bali, saya sangat puas dengan Sambal Matah dari Dapur Uti. Rasanya seperti di rumah!"</p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-orange-300 rounded-full flex items-center justify-center text-2xl mr-4">👩</div>
+                        <div>
+                            <p class="font-semibold">Kadek Putri</p>
+                            <p class="text-sm opacity-80">Food Blogger, Denpasar</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Team -->
+    <section id="team" class="py-20 px-4 bg-white">
+        <div class="container mx-auto">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 fade-in">
+                <span class="gradient-text">Tim Kami</span>
+            </h2>
+            <p class="text-center text-gray-600 mb-12 text-lg fade-in">Orang-orang di balik kelezatan Dapur Uti</p>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <div class="text-center fade-in">
+                    <div class="w-40 h-40 mx-auto mb-4 gradient-bg rounded-full flex items-center justify-center text-6xl">👩‍🍳</div>
+                    <h3 class="text-2xl font-bold mb-2">Lustiyana</h3>
+                    <p class="text-orange-600 font-semibold mb-3">Founder & Head Chef</p>
+                    <p class="text-gray-600">Membawa resep keluarga turun-temurun dengan pengalaman memasak 20+ tahun</p>
+                </div>
+                
+                <div class="text-center fade-in">
+                    <div class="w-40 h-40 mx-auto mb-4 gradient-bg rounded-full flex items-center justify-center text-6xl">👨‍💼</div>
+                    <h3 class="text-2xl font-bold mb-2">Ahmad Rizki</h3>
+                    <p class="text-orange-600 font-semibold mb-3">Operations Manager</p>
+                    <p class="text-gray-600">Mengelola produksi dan distribusi dengan standar kualitas tinggi</p>
+                </div>
+                
+                <div class="text-center fade-in">
+                    <div class="w-40 h-40 mx-auto mb-4 gradient-bg rounded-full flex items-center justify-center text-6xl">👩‍💻</div>
+                    <h3 class="text-2xl font-bold mb-2">Siti Nurhaliza</h3>
+                    <p class="text-orange-600 font-semibold mb-3">Marketing Director</p>
+                    <p class="text-gray-600">Mengembangkan brand dan menjangkau pelanggan di seluruh Indonesia</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Investment Opportunity -->
+    <section id="invest" class="py-20 px-4 bg-orange-50">
+        <div class="container mx-auto max-w-5xl">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 fade-in">
+                <span class="gradient-text">Peluang Investasi</span>
+            </h2>
+            <p class="text-center text-gray-600 mb-12 text-lg fade-in">Bergabunglah dalam pertumbuhan bisnis kuliner tradisional Indonesia</p>
+            
+            <div class="bg-white rounded-3xl shadow-xl overflow-hidden fade-in">
+                <div class="grid md:grid-cols-2">
+                    <div class="p-8 md:p-12">
+                        <h3 class="text-3xl font-bold mb-6 gradient-text">Kenapa Investasi di Dapur Uti?</h3>
+                        <ul class="space-y-4 mb-8">
+                            <li class="flex items-start">
+                                <span class="text-2xl mr-3">✅</span>
+                                <span class="text-gray-700">Pertumbuhan konsisten 150% year-over-year</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-2xl mr-3">✅</span>
+                                <span class="text-gray-700">Pasar kuliner tradisional terus berkembang</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-2xl mr-3">✅</span>
+                                <span class="text-gray-700">Model bisnis tervalidasi dengan margin sehat</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-2xl mr-3">✅</span>
+                                <span class="text-gray-700">Tim berpengalaman dan berdedikasi</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="gradient-bg p-8 md:p-12 text-white">
+                        <h3 class="text-3xl font-bold mb-6">Proyeksi Keuangan</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <p class="text-sm opacity-80 mb-1">Target Pendanaan</p>
+                                <p class="text-4xl font-bold">Rp 500 Juta</p>
+                            </div>
+                            <div>
+                                <p class="text-sm opacity-80 mb-1">ROI Proyeksi (3 Tahun)</p>
+                                <p class="text-4xl font-bold">300%</p>
+                            </div>
+                            <div>
+                                <p class="text-sm opacity-80 mb-1">Target Revenue 2026</p>
+                                <p class="text-4xl font-bold">Rp 2 Miliar</p>
+                            </div>
+                        </div>
+                        <a href="#contact" class="block bg-white text-orange-600 text-center px-8 py-4 rounded-full font-semibold mt-8 hover:bg-orange-100 transition">
+                            Hubungi untuk Detail
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Form -->
+    <section id="contact" class="py-20 px-4 bg-white">
+        <div class="container mx-auto max-w-3xl">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 fade-in">
+                <span class="gradient-text">Hubungi Kami</span>
+            </h2>
+            <p class="text-center text-gray-600 mb-12 text-lg fade-in">Tertarik menjadi investor atau pelanggan? Kami siap membantu!</p>
+            
+            <form class="bg-orange-50 rounded-3xl p-8 md:p-12 shadow-xl fade-in" onsubmit="handleSubmit(event)">
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Nama Lengkap</label>
+                    <input type="text" required class="w-full px-4 py-3 rounded-lg border border-orange-200 focus:border-orange-500 focus:outline-none" placeholder="Masukkan nama Anda">
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Email</label>
+                    <input type="email" required class="w-full px-4 py-3 rounded-lg border border-orange-200 focus:border-orange-500 focus:outline-none" placeholder="email@contoh.com">
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Nomor WhatsApp</label>
+                    <input type="tel" required class="w-full px-4 py-3 rounded-lg border border-orange-200 focus:border-orange-500 focus:outline-none" placeholder="08xxxxxxxxxx">
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Jenis Inquiry</label>
+                    <select required class="w-full px-4 py-3 rounded-lg border border-orange-200 focus:border-orange-500 focus:outline-none">
+                        <option value="">Pilih jenis inquiry</option>
+                        <option value="investor">Peluang Investasi</option>
+                        <option value="reseller">Menjadi Reseller</option>
+                        <option value="customer">Pembelian Produk</option>
+                        <option value="other">Lainnya</option>
+                    </select>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Pesan</label>
+                    <textarea required rows="5" class="w-full px-4 py-3 rounded-lg border border-orange-200 focus:border-orange-500 focus:outline-none" placeholder="Tuliskan pesan Anda di sini..."></textarea>
+                </div>
+                
+                <button type="submit" class="w-full gradient-bg text-white px-8 py-4 rounded-full font-semibold text-lg hover:opacity-90 transition">
+                    Kirim Pesan 📧
+                </button>
+            </form>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="gradient-bg text-white py-12 px-4">
+        <div class="container mx-auto text-center">
+            <div class="text-4xl mb-4">🌶️</div>
+            <h3 class="text-2xl font-bold mb-2">Dapur Uti</h3>
+            <p class="mb-6">Sambal Khas Rumahan, Rasa Autentik, Peluang Besar</p>
+            <div class="flex justify-center space-x-6 mb-6">
+                <a href="#" class="hover:opacity-80 transition">📧 info@dapuruti.com</a>
+                <a href="#" class="hover:opacity-80 transition">📱 0812-3456-7890</a>
+            </div>
+            <p class="text-sm opacity-80">&copy; 2026 Dapur Uti. All rights reserved. Made with ❤️ and 🌶️</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Scroll Animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // Form Submit Handler
+        function handleSubmit(event) {
+            event.preventDefault();
+            alert('Terima kasih! Pesan Anda telah diterima. Tim kami akan segera menghubungi Anda. 🌶️');
+            event.target.reset();
+        }
+    </script>
+</body>
+</html>
