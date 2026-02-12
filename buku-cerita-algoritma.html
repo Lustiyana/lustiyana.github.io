@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Misi Rahasia Robot Rapi: Belajar Algoritma</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #f0f9ff;
+            overflow-x: hidden;
+        }
+        h1, h2 {
+            font-family: 'Fredoka One', cursive;
+        }
+        .robot-bounce {
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        .card-pop {
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .card-pop:hover {
+            transform: scale(1.05);
+        }
+        .step-inactive { opacity: 0.3; filter: grayscale(1); }
+        .step-active { opacity: 1; filter: grayscale(0); transform: scale(1.1); }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div id="app" class="max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden border-4 border-blue-400">
+        
+        <!-- Header -->
+        <div class="bg-blue-500 p-6 text-white text-center relative">
+            <h1 class="text-3xl md:text-4xl mb-2">Robot Rapi & Algoritma</h1>
+            <p class="text-blue-100 italic">Misi Membuat Roti Lapis!</p>
+            <div class="absolute -bottom-6 right-6 bg-yellow-400 text-blue-900 px-4 py-1 rounded-full font-bold shadow-md">
+                Level 1
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="w-full bg-gray-200 h-3">
+            <div id="progress" class="bg-green-400 h-3 transition-all duration-500" style="width: 20%"></div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="p-8 min-h-[400px] flex flex-col items-center justify-center text-center">
+            
+            <div id="scene-image" class="mb-8 text-8xl robot-bounce">
+                🤖
+            </div>
+
+            <div id="story-text" class="text-xl md:text-2xl text-gray-700 font-semibold mb-8 leading-relaxed">
+                Halo! Namaku **Robot Rapi**. Aku sangat pintar, tapi aku butuh bantuanmu untuk memberikan instruksi yang tepat!
+            </div>
+
+            <!-- Interaction Zone -->
+            <div id="interaction-zone" class="w-full space-y-4">
+                <!-- Buttons will be injected here -->
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="p-6 bg-gray-50 flex justify-between items-center border-t border-gray-100">
+            <button id="btn-reset" class="text-gray-400 hover:text-blue-500 font-bold">Ulangi</button>
+            <div id="footer-note" class="text-sm text-blue-400 font-medium italic">
+                Ketuk tombol untuk membantu Rapi!
+            </div>
+        </div>
+    </div>
+
+    <!-- Algorithm Explanation Modal (Hidden by default) -->
+    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl text-center">
+            <div class="text-6xl mb-4">💡</div>
+            <h2 class="text-2xl text-blue-600 mb-4">Hebat! Kamu Berhasil!</h2>
+            <p id="modal-text" class="text-gray-600 mb-6 leading-relaxed">
+                Tadi itu disebut **Algoritma**. Algoritma adalah urutan langkah-langkah untuk menyelesaikan tugas. Tanpa urutan yang benar, rotinya tidak akan jadi!
+            </p>
+            <button onclick="closeModal()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full transition-colors shadow-lg">
+                Main Lagi
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const storyData = [
+            {
+                id: 0,
+                text: "Halo! Namaku **Robot Rapi**. Aku sangat pintar, tapi aku butuh bantuanmu untuk memberikan instruksi yang tepat!",
+                emoji: "🤖",
+                options: [{ label: "Ayo Kita Mulai!", next: 1 }],
+                progress: 20
+            },
+            {
+                id: 1,
+                text: "Hari ini kita mau membuat **Roti Lapis Cokelat**. Apa langkah pertama yang harus Rapi lakukan?",
+                emoji: "🍞",
+                options: [
+                    { label: "Ambil Roti", next: 2, correct: true },
+                    { label: "Oles Cokelat", next: "error_1", correct: false }
+                ],
+                progress: 40
+            },
+            {
+                id: 2,
+                text: "Bagus! Roti sudah di atas piring. Sekarang, apa langkah selanjutnya?",
+                emoji: "🔪",
+                options: [
+                    { label: "Tumpuk Roti", next: "error_2", correct: false },
+                    { label: "Buka Toples Cokelat", next: 3, correct: true }
+                ],
+                progress: 60
+            },
+            {
+                id: 3,
+                text: "Hampir jadi! Sekarang cokelatnya sudah terbuka. Lalu?",
+                emoji: "🍫",
+                options: [
+                    { label: "Oleskan Cokelat ke Roti", next: 4, correct: true },
+                    { label: "Makan Rotinya Langsung", next: "error_3", correct: false }
+                ],
+                progress: 80
+            },
+            {
+                id: 4,
+                text: "Yum! Langkah terakhir supaya jadi Roti Lapis yang sempurna?",
+                emoji: "🥪",
+                options: [
+                    { label: "Tumpuk dengan Roti Lain", next: "finish", correct: true }
+                ],
+                progress: 100
+            },
+            {
+                id: "error_1",
+                text: "Aduh! Rapi tidak bisa mengoles cokelat kalau rotinya belum diambil. Urutannya salah!",
+                emoji: "🤯",
+                options: [{ label: "Coba Lagi", next: 1 }],
+                progress: 40
+            },
+            {
+                id: "error_2",
+                text: "Wah, kalau langsung ditumpuk, nanti tidak ada isinya dong? Ayo ikuti langkah yang benar!",
+                emoji: "😅",
+                options: [{ label: "Kembali", next: 2 }],
+                progress: 60
+            },
+            {
+                id: "error_3",
+                text: "Nyam! Tapi misi kita kan membuat roti lapis, bukan makan roti polos. Hehe!",
+                emoji: "😋",
+                options: [{ label: "Kembali", next: 3 }],
+                progress: 80
+            }
+        ];
+
+        let currentStep = 0;
+
+        function updateScene() {
+            const step = storyData.find(s => s.id === currentStep);
+            const textEl = document.getElementById('story-text');
+            const emojiEl = document.getElementById('scene-image');
+            const interactionEl = document.getElementById('interaction-zone');
+            const progressEl = document.getElementById('progress');
+
+            // Set content
+            textEl.innerHTML = step.text;
+            emojiEl.innerText = step.emoji;
+            progressEl.style.width = step.progress + "%";
+
+            // Set buttons
+            interactionEl.innerHTML = '';
+            step.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "w-full bg-white border-2 border-blue-400 hover:bg-blue-50 text-blue-600 font-bold py-4 px-6 rounded-2xl shadow-sm card-pop text-lg mb-2";
+                btn.innerText = opt.label;
+                btn.onclick = () => {
+                    if (opt.next === "finish") {
+                        showModal();
+                    } else {
+                        currentStep = opt.next;
+                        updateScene();
+                    }
+                };
+                interactionEl.appendChild(btn);
+            });
+        }
+
+        function showModal() {
+            document.getElementById('modal').classList.remove('hidden');
+            document.getElementById('modal').classList.add('flex');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+            document.getElementById('modal').classList.remove('flex');
+            currentStep = 0;
+            updateScene();
+        }
+
+        document.getElementById('btn-reset').onclick = () => {
+            currentStep = 0;
+            updateScene();
+        };
+
+        // Initialize
+        updateScene();
+    </script>
+</body>
+</html>

@@ -1,0 +1,372 @@
+
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Rapi: Master Algoritma 10 Misi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #f0fdf4;
+            touch-action: manipulation;
+        }
+        h1, h2, h3 { font-family: 'Fredoka One', cursive; }
+        
+        .step-slot {
+            min-height: 55px;
+            border: 2px dashed #cbd5e1;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8fafc;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        .step-slot.filled {
+            border-style: solid;
+            background: #ffffff;
+            border-color: #10b981;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+        .instruction-card {
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+            font-size: 0.9rem;
+        }
+        .instruction-card:active { transform: scale(0.95); }
+
+        .floating-robot {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .shake {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+    </style>
+</head>
+<body class="p-2 md:p-4">
+
+    <div id="app" class="max-w-2xl mx-auto bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border-4 border-green-200">
+        
+        <!-- Header -->
+        <div id="header-bg" class="bg-gradient-to-r from-green-500 to-teal-500 p-5 text-white text-center">
+            <div class="flex justify-between items-center mb-1">
+                <span id="level-badge" class="bg-white/20 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest">Misi 1</span>
+                <span id="progress-text" class="text-xs font-bold">1 / 10</span>
+            </div>
+            <h1 id="level-title" class="text-xl md:text-2xl">Misi 1: Menyiapkan Pesta</h1>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="w-full bg-gray-100 h-2">
+            <div id="top-progress" class="bg-yellow-400 h-full transition-all duration-500" style="width: 10%"></div>
+        </div>
+
+        <div class="p-5">
+            <!-- Visual Guidance -->
+            <div class="flex flex-col items-center mb-4">
+                <div id="robot-display" class="text-6xl mb-2 floating-robot">🤖</div>
+                <div id="story-bubble" class="bg-green-50 border-2 border-green-100 p-3 rounded-2xl text-green-800 text-center relative w-full">
+                    <p id="story-text" class="text-sm md:text-base font-semibold">Memuat cerita...</p>
+                    <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-green-50 border-l-2 border-t-2 border-green-100 rotate-45"></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Drop Area -->
+                <div>
+                    <h3 class="text-gray-400 text-[10px] font-bold uppercase mb-2 tracking-widest">Urutan Langkah:</h3>
+                    <div id="algorithm-slots">
+                        <!-- Slots dynamic -->
+                    </div>
+                </div>
+
+                <!-- Source Area -->
+                <div>
+                    <h3 class="text-gray-400 text-[10px] font-bold uppercase mb-2 tracking-widest">Kotak Instruksi:</h3>
+                    <div id="instruction-pool" class="space-y-2">
+                        <!-- Instructions dynamic -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="p-5 bg-gray-50 border-t flex gap-3">
+            <button onclick="checkAlgorithm()" class="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-2xl shadow-lg transition-transform active:scale-95">
+                JALANKAN! ▶️
+            </button>
+            <button onclick="resetLevel()" class="bg-gray-200 hover:bg-gray-300 text-gray-600 font-bold px-5 rounded-2xl transition-transform active:scale-95">
+                RESET
+            </button>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-6 z-50">
+        <div class="bg-white rounded-[2.5rem] p-8 max-w-sm w-full text-center shadow-2xl scale-in">
+            <div id="modal-icon" class="text-6xl mb-4">🌟</div>
+            <h2 id="modal-status" class="text-2xl text-green-600 mb-2 font-bold">LUAR BIASA!</h2>
+            <p id="lesson-text" class="text-gray-600 mb-8 text-sm italic border-l-4 border-yellow-400 pl-4 py-2 bg-yellow-50"></p>
+            <button id="next-btn" onclick="nextLevel()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-2xl text-lg shadow-lg">
+                Misi Selanjutnya!
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const missions = [
+            {
+                id: 1,
+                title: "Bikin Kue Cokelat",
+                story: "Rapi mau bikin kue untuk teman-teman. Susun langkahnya ya!",
+                steps: [
+                    { id: '1', text: "Campur Tepung & Telur", icon: "🥣" },
+                    { id: '2', text: "Aduk Sampai Rata", icon: "🥄" },
+                    { id: '3', text: "Panggang di Oven", icon: "🔥" }
+                ],
+                lesson: "Urutan itu penting! Kamu tidak bisa mengaduk adonan kalau tepungnya belum ada."
+            },
+            {
+                id: 2,
+                title: "Pagi Hari Rapi",
+                story: "Rapi harus siap-siap sekolah. Jangan sampai salah pakai baju!",
+                steps: [
+                    { id: '1', text: "Pakai Kemeja", icon: "👕" },
+                    { id: '2', text: "Pakai Dasi", icon: "👔" },
+                    { id: '3', text: "Pakai Jaket", icon: "🧥" }
+                ],
+                lesson: "Langkah persiapan dalam algoritma harus logis. Dasi dulu baru jaket!"
+            },
+            {
+                id: 3,
+                title: "Menyeberang Jalan",
+                story: "Gunakan sensor warna Rapi untuk menyeberang dengan aman!",
+                steps: [
+                    { id: '1', text: "Cek Lampu Merah", icon: "🚦" },
+                    { id: '2', text: "Tunggu Sampai Hijau", icon: "⏳" },
+                    { id: '3', text: "Jalan di Zebra Cross", icon: "🚶" }
+                ],
+                lesson: "Ini disebut 'Conditionals'. Kita bertindak berdasarkan warna lampu!"
+            },
+            {
+                id: 4,
+                title: "Menanam Bunga",
+                story: "Ayo hijaukan taman! Apa urutan menanam benih yang benar?",
+                steps: [
+                    { id: '1', text: "Gali Tanah", icon: "🕳️" },
+                    { id: '2', text: "Masukkan Benih", icon: "🌱" },
+                    { id: '3', text: "Tutup & Siram", icon: "💧" }
+                ],
+                lesson: "Setiap langkah kecil adalah bagian dari algoritma yang besar."
+            },
+            {
+                id: 5,
+                title: "Robot Tukang Pos",
+                story: "Kirim surat ke rumah nenek. Jangan lupa alamatnya!",
+                steps: [
+                    { id: '1', text: "Tulis Alamat", icon: "✍️" },
+                    { id: '2', text: "Tempel Perangko", icon: "🎟️" },
+                    { id: '3', text: "Masukkan Kotak Pos", icon: "📮" }
+                ],
+                lesson: "Tanpa alamat, algoritma pengiriman tidak tahu harus ke mana."
+            },
+            {
+                id: 6,
+                title: "Mencuci Piring",
+                story: "Piring kotor menumpuk! Bantu Rapi membersihkannya.",
+                steps: [
+                    { id: '1', text: "Gosok dengan Sabun", icon: "🧼" },
+                    { id: '2', text: "Bilas dengan Air", icon: "🚰" },
+                    { id: '3', text: "Lap Sampai Kering", icon: "✨" }
+                ],
+                lesson: "Bilas dulu baru lap, supaya piringnya tidak basah lagi."
+            },
+            {
+                id: 7,
+                title: "Membuat Teh Manis",
+                story: "Tamu akan datang! Buatkan teh hangat yang manis.",
+                steps: [
+                    { id: '1', text: "Celup Kantong Teh", icon: "☕" },
+                    { id: '2', text: "Tambah Gula", icon: "🍬" },
+                    { id: '3', text: "Aduk Pelan-pelan", icon: "🥄" }
+                ],
+                lesson: "Mengaduk adalah cara mencampur 'data' (gula) ke dalam 'proses' (teh)."
+            },
+            {
+                id: 8,
+                title: "Meluncurkan Roket",
+                story: "Rapi mau ke Bulan! Ayo bantu hitung mundurnya.",
+                steps: [
+                    { id: '1', text: "Hitung 3, 2, 1...", icon: "🔢" },
+                    { id: '2', text: "Nyalakan Mesin", icon: "🧨" },
+                    { id: '3', text: "Lepas Landas!", icon: "🚀" }
+                ],
+                lesson: "Algoritma harus punya instruksi awal yang jelas sebelum mulai."
+            },
+            {
+                id: 9,
+                title: "Merapikan Mainan",
+                story: "Ada 3 mainan di lantai. Masukkan ke kotak satu per satu.",
+                steps: [
+                    { id: '1', text: "Ambil Satu Mainan", icon: "🧸" },
+                    { id: '2', text: "Taruh di Kotak", icon: "📦" },
+                    { id: '3', text: "Ulangi Sampai Habis", icon: "🔁" }
+                ],
+                lesson: "Ini disebut 'Loop' atau Perulangan. Melakukan hal yang sama berkali-kali."
+            },
+            {
+                id: 10,
+                title: "Pesta Kembang Api",
+                story: "Misi Terakhir! Mari kita rayakan keberhasilanmu!",
+                steps: [
+                    { id: '1', text: "Siapkan Petasan", icon: "🎆" },
+                    { id: '2', text: "Bakar Sumbu", icon: "🕯️" },
+                    { id: '3', text: "Lari Menjauh!", icon: "🏃" }
+                ],
+                lesson: "Selamat! Kamu sudah menguasai 10 Algoritma Robot Rapi!"
+            }
+        ];
+
+        let currentLevelIndex = 0;
+        let selectedOrder = [];
+
+        function loadLevel() {
+            const mission = missions[currentLevelIndex];
+            selectedOrder = [];
+            
+            // Header & Progress
+            document.getElementById('level-badge').innerText = `Misi ${mission.id}`;
+            document.getElementById('level-title').innerText = mission.title;
+            document.getElementById('progress-text').innerText = `${mission.id} / 10`;
+            document.getElementById('top-progress').style.width = (mission.id * 10) + "%";
+            document.getElementById('story-text').innerText = mission.story;
+            document.getElementById('robot-display').innerText = "🤖";
+            document.getElementById('header-bg').className = `bg-gradient-to-r ${getTheme(mission.id)} p-5 text-white text-center`;
+
+            // Slots
+            const slots = document.getElementById('algorithm-slots');
+            slots.innerHTML = '';
+            mission.steps.forEach((_, i) => {
+                const slot = document.createElement('div');
+                slot.className = "step-slot";
+                slot.id = `slot-${i}`;
+                slot.innerHTML = `<span class="text-gray-300 text-[10px] font-bold">${i+1}</span>`;
+                slots.appendChild(slot);
+            });
+
+            // Pool
+            const pool = document.getElementById('instruction-pool');
+            pool.innerHTML = '';
+            const shuffled = [...mission.steps].sort(() => Math.random() - 0.5);
+            shuffled.forEach(step => {
+                const card = document.createElement('div');
+                card.className = "instruction-card bg-white border-2 border-gray-100 p-3 rounded-xl shadow-sm flex items-center gap-2 hover:border-green-400 font-bold text-gray-700";
+                card.innerHTML = `<span class="text-xl">${step.icon}</span> ${step.text}`;
+                card.onclick = () => addToAlgo(step, card);
+                pool.appendChild(card);
+            });
+        }
+
+        function getTheme(id) {
+            if (id <= 3) return "from-green-500 to-teal-500";
+            if (id <= 6) return "from-blue-500 to-indigo-500";
+            if (id <= 9) return "from-purple-500 to-pink-500";
+            return "from-orange-500 to-red-500";
+        }
+
+        function addToAlgo(step, card) {
+            const mission = missions[currentLevelIndex];
+            if (selectedOrder.length < mission.steps.length) {
+                const index = selectedOrder.length;
+                selectedOrder.push(step);
+                
+                const slot = document.getElementById(`slot-${index}`);
+                slot.innerHTML = card.innerHTML;
+                slot.classList.add('filled', 'text-green-700', 'border-green-300');
+                
+                card.classList.add('opacity-20', 'pointer-events-none');
+            }
+        }
+
+        function checkAlgorithm() {
+            const mission = missions[currentLevelIndex];
+            if (selectedOrder.length < mission.steps.length) {
+                shakeRobot("Langkahnya belum lengkap!", "🤔");
+                return;
+            }
+
+            let win = true;
+            for(let i=0; i<mission.steps.length; i++) {
+                if(selectedOrder[i].id !== mission.steps[i].id) {
+                    win = false; break;
+                }
+            }
+
+            if(win) {
+                showSuccess(mission.lesson, mission.id === 10);
+            } else {
+                shakeRobot("Waduh, urutannya ada yang salah!", "🤯");
+            }
+        }
+
+        function shakeRobot(msg, emoji) {
+            const bubble = document.getElementById('story-text');
+            const robot = document.getElementById('robot-display');
+            const container = document.getElementById('app');
+            
+            bubble.innerText = msg;
+            robot.innerText = emoji;
+            container.classList.add('shake');
+            
+            setTimeout(() => {
+                bubble.innerText = missions[currentLevelIndex].story;
+                robot.innerText = "🤖";
+                container.classList.remove('shake');
+            }, 2500);
+        }
+
+        function showSuccess(lesson, last) {
+            const modal = document.getElementById('success-modal');
+            document.getElementById('lesson-text').innerText = lesson;
+            
+            if(last) {
+                document.getElementById('modal-status').innerText = "TAMAT!";
+                document.getElementById('modal-icon').innerText = "👑";
+                document.getElementById('next-btn').innerText = "Main Lagi dari Awal";
+                document.getElementById('next-btn').onclick = () => location.reload();
+            }
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function nextLevel() {
+            document.getElementById('success-modal').classList.add('hidden');
+            currentLevelIndex++;
+            loadLevel();
+        }
+
+        function resetLevel() {
+            loadLevel();
+        }
+
+        window.onload = loadLevel;
+    </script>
+</body>
+</html>
