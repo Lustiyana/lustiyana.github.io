@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan Robot Rapi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background-color: #f0f9ff;
+        }
+        
+        .page-transition {
+            transition: all 0.5s ease-in-out;
+        }
+
+        .robot-rapi {
+            font-size: 80px;
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+
+        .robot-rapi:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .btn-action {
+            transition: all 0.2s;
+            box-shadow: 0 4px 0 #1d4ed8;
+        }
+
+        .btn-action:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #1d4ed8;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <div id="story-container" class="max-w-md w-full bg-white rounded-3xl shadow-2xl overflow-hidden border-8 border-blue-400 p-8 text-center">
+        <!-- Konten akan berubah lewat JavaScript -->
+        <div id="content" class="page-transition">
+            <!-- Halaman Utama -->
+            <div id="page-home">
+                <div class="robot-rapi">🤖</div>
+                <h1 class="text-3xl font-bold text-blue-600 mt-4">Petualangan Robot Rapi</h1>
+                <p class="text-gray-600 mt-2 text-lg">Belajar "Bahasa Ajaib" bersama Rapi!</p>
+                <button onclick="goToPage(1)" class="btn-action mt-8 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full text-xl">
+                    Mulai Cerita 🚀
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentState = {
+            energy: 0,
+            direction: '',
+            instructionCount: 0
+        };
+
+        const pages = {
+            1: {
+                content: `
+                    <div class="text-left">
+                        <span class="text-6xl mb-4 block text-center">🏠</span>
+                        <h2 class="text-2xl font-bold text-blue-600 mb-4">Siapa itu Kiki?</h2>
+                        <p class="text-lg text-gray-700 leading-relaxed">
+                            Kenalkan, ini <b>Kiki</b>. Kiki adalah robot yang sangat pintar, tapi dia tidak tahu cara melakukan apa pun sendirian. 
+                            <br><br>
+                            Kiki butuh bantuanmu untuk memberitahunya apa yang harus dilakukan. Memberi tahu robot apa yang harus dilakukan disebut <b>"Coding"</b>!
+                        </p>
+                        <button onclick="goToPage(2)" class="btn-action mt-8 w-full bg-orange-400 hover:bg-orange-500 text-white font-bold py-3 px-8 rounded-xl text-lg">
+                            Lanjut: Bagaimana Caranya? ➡️
+                        </button>
+                    </div>
+                `
+            },
+            2: {
+                content: `
+                    <div class="text-left">
+                        <span class="text-6xl mb-4 block text-center">📝</span>
+                        <h2 class="text-2xl font-bold text-blue-600 mb-4">Resep Rahasia</h2>
+                        <p class="text-lg text-gray-700 leading-relaxed">
+                            Coding itu seperti menulis <b>resep masakan</b>. Jika kamu ingin membuat roti lapis, kamu harus bilang:
+                            <br><br>
+                            1. Ambil roti 🍞<br>
+                            2. Oleskan selai 🍓<br>
+                            3. Tutup dengan roti lagi 🍞
+                            <br><br>
+                            Kalau urutannya salah, rotinya jadi berantakan! Itulah coding: memberikan perintah yang urut.
+                        </p>
+                        <button onclick="goToPage(3)" class="btn-action mt-8 w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-xl text-lg">
+                            Ayo Coba Coding Kiki! 🛠️
+                        </button>
+                    </div>
+                `
+            },
+            3: {
+                content: `
+                    <div class="text-center">
+                        <h2 class="text-2xl font-bold text-blue-600 mb-4">Tantangan 1: Isi Baterai!</h2>
+                        <p class="text-lg text-gray-700 mb-6">Kiki lapar! Bantu dia berjalan ke arah <b>Baterai</b> 🔋</p>
+                        
+                        <div class="bg-gray-100 p-6 rounded-2xl mb-6 flex justify-between items-center relative h-32">
+                            <div id="rapi-sprite" class="text-5xl absolute left-4 transition-all duration-500">🤖</div>
+                            <div class="text-5xl absolute right-4">🔋</div>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-3">
+                            <button onclick="moveKiki('right')" class="btn-action bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-bold py-3 rounded-xl">
+                                Jalankan Perintah: Maju 1 Langkah
+                            </button>
+                        </div>
+                        <div id="feedback" class="mt-4 text-blue-600 font-bold h-6"></div>
+                    </div>
+                `
+            },
+            4: {
+                content: `
+                    <div class="text-left">
+                        <span class="text-6xl mb-4 block text-center">🎉</span>
+                        <h2 class="text-2xl font-bold text-blue-600 mb-4">Hebat! Kamu adalah Coder!</h2>
+                        <p class="text-lg text-gray-700 leading-relaxed">
+                            Tadi kamu baru saja membuat <b>Algoritma</b>. Itu adalah kata keren untuk "Langkah-langkah penyelesaian masalah".
+                            <br><br>
+                            Dunia digital di sekitarmu, seperti game, HP, bahkan lampu lalu lintas, semuanya digerakkan oleh perintah seperti tadi!
+                        </p>
+                        <div class="mt-8 p-4 bg-blue-50 rounded-xl border-2 border-dashed border-blue-200">
+                            <p class="italic text-blue-800">"Coding adalah cara kita berbicara dengan mesin untuk menciptakan hal ajaib."</p>
+                        </div>
+                        <button onclick="goToPage('home')" class="btn-action mt-8 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-xl text-lg">
+                            Main Lagi? 🔄
+                        </button>
+                    </div>
+                `
+            }
+        };
+
+        function goToPage(pageKey) {
+            const contentDiv = document.getElementById('content');
+            contentDiv.style.opacity = 0;
+            
+            setTimeout(() => {
+                if (pageKey === 'home') {
+                    location.reload();
+                    return;
+                }
+                contentDiv.innerHTML = pages[pageKey].content;
+                contentDiv.style.opacity = 1;
+                
+                // Reset Kiki position if on challenge page
+                if (pageKey === 3) {
+                    currentState.instructionCount = 0;
+                }
+            }, 300);
+        }
+
+        function moveKiki(direction) {
+            const rapi = document.getElementById('rapi-sprite');
+            const feedback = document.getElementById('feedback');
+            currentState.instructionCount++;
+
+            if (currentState.instructionCount === 1) {
+                rapi.style.left = '40%';
+                feedback.innerText = "Kiki berjalan... Sedikit lagi!";
+            } else if (currentState.instructionCount === 2) {
+                rapi.style.left = '75%';
+                feedback.innerText = "YAY! Kiki kenyang! ⚡";
+                setTimeout(() => {
+                    goToPage(4);
+                }, 1500);
+            }
+        }
+    </script>
+</body>
+</html>
