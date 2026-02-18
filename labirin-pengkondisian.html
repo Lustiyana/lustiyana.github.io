@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Labirin Pengkondisian Robo - 15 Level</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap');
+        body { font-family: 'Fredoka', sans-serif; background-color: #fff7ed; }
+        .btn-choice { transition: all 0.2s; border-bottom-width: 4px; }
+        .btn-choice:active { border-bottom-width: 0px; transform: translateY(4px); }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <div class="max-w-md w-full bg-white rounded-3xl shadow-xl overflow-hidden border-t-8 border-orange-400">
+        <div class="p-6 text-center">
+            <h1 class="text-2xl font-bold text-orange-600">🚦 Master JIKA-MAKA</h1>
+            <p id="level-counter" class="text-gray-500 text-sm font-bold">Level: 0 / 15</p>
+        </div>
+
+        <div id="game-box" class="p-8 pt-0">
+            <div id="display-area" class="bg-orange-50 rounded-2xl p-6 mb-6 text-center">
+                <div id="visual-cue" class="text-7xl mb-4">🤖</div>
+                <p id="instruction-text" class="text-lg text-gray-700 font-medium italic">"Siap menyelesaikan 15 tantangan?"</p>
+            </div>
+
+            <div id="options" class="grid grid-cols-1 gap-3">
+                <button onclick="nextLevel(0)" class="btn-choice bg-orange-500 border-orange-700 text-white font-bold py-4 rounded-xl shadow-lg">MULAI PETUALANGAN</button>
+            </div>
+            
+            <div id="feedback" class="mt-4 text-center font-bold min-h-[24px]"></div>
+        </div>
+    </div>
+
+    <script>
+        const levels = [
+            { rule: "JIKA ada 🔥 Api, MAKA Robo harus Lompat!", cue: "🔥", choices: [{ text: "Jalan Terus", correct: false }, { text: "Lompat!", correct: true }], success: "Hebat! Robo aman." },
+            { rule: "JIKA ada 💧 Air, MAKA Robo harus Pakai Payung!", cue: "💧", choices: [{ text: "Pakai Payung", correct: true }, { text: "Berenang", correct: false }], success: "Pintar! Robo tidak basah." },
+            { rule: "JIKA Lampu 🔴 Merah, MAKA Robo harus Berhenti!", cue: "🔴", choices: [{ text: "Berhenti", correct: true }, { text: "Jalan", correct: false }], success: "Bagus! Robo taat aturan." },
+            { rule: "JIKA ada 🍌 Kulit Pisang, MAKA Robo harus Menghindar!", cue: "🍌", choices: [{ text: "Injak", correct: false }, { text: "Menghindar", correct: true }], success: "Wuu! Hampir saja terpeleset." },
+            { rule: "JIKA hari ☀️ Panas, MAKA Robo harus Minum!", cue: "☀️", choices: [{ text: "Minum", correct: true }, { text: "Tidur", correct: false }], success: "Segar! Baterai Robo stabil." },
+            { rule: "JIKA bertemu 🐶 Anjing Galak, MAKA Robo harus Diam!", cue: "🐶", choices: [{ text: "Lari", correct: false }, { text: "Diam", correct: true }], success: "Anjingnya pergi, bagus!" },
+            { rule: "JIKA ada 🪵 Batang Pohon, MAKA Robo harus Melompat!", cue: "🪵", choices: [{ text: "Melompat", correct: true }, { text: "Tabrak", correct: false }], success: "Lompatan yang tinggi!" },
+            { rule: "JIKA Baterai 🪫 Lemah, MAKA Robo harus Charge!", cue: "🪫", choices: [{ text: "Main Game", correct: false }, { text: "Charge", correct: true }], success: "Baterai penuh kembali!" },
+            { rule: "JIKA ada 🍯 Madu, MAKA Robo harus lari dari Lebah!", cue: "🐝", choices: [{ text: "Lari!", correct: true }, { text: "Diam", correct: false }], success: "Selamat dari sengatan!" },
+            { rule: "JIKA melihat 💎 Berlian, MAKA Robo harus Mengambilnya!", cue: "💎", choices: [{ text: "Lewati", correct: false }, { text: "Ambil", correct: true }], success: "Koleksi harta bertambah!" },
+            { rule: "JIKA jalan ❄️ Licin/Es, MAKA Robo harus Pelan-pelan!", cue: "❄️", choices: [{ text: "Pelan-pelan", correct: true }, { text: "Cepat", correct: false }], success: "Keseimbangan terjaga!" },
+            { rule: "JIKA ada 🚪 Pintu Terkunci, MAKA Robo harus Cari Kunci!", cue: "🚪", choices: [{ text: "Dobrak", correct: false }, { text: "Cari Kunci", correct: true }], success: "Klik! Pintu terbuka." },
+            { rule: "JIKA melihat 🚮 Sampah, MAKA Robo harus Membuangnya!", cue: "🚮", choices: [{ text: "Buang Sampah", correct: true }, { text: "Biarkan", correct: false }], success: "Lingkungan jadi bersih!" },
+            { rule: "JIKA bertemu 👴 Kakek, MAKA Robo harus Memberi Salam!", cue: "👴", choices: [{ text: "Cuek", correct: false }, { text: "Beri Salam", correct: true }], success: "Robo robot yang sopan!" },
+            { rule: "JIKA sampai di 🏰 Istana, MAKA Robo harus Masuk!", cue: "🏰", choices: [{ text: "Masuk!", correct: true }, { text: "Pulang", correct: false }], success: "Selamat! Kamu menang!" }
+        ];
+
+        let current = 0;
+
+        function nextLevel(idx) {
+            if (idx >= levels.length) {
+                document.getElementById('level-counter').textContent = "Level: 15 / 15";
+                document.getElementById('display-area').innerHTML = "<div class='text-7xl'>🏆</div><p class='text-xl font-bold text-green-600 font-fredoka'>Pahlawan Logika Sejati!</p>";
+                document.getElementById('options').innerHTML = '<button onclick="location.reload()" class="btn-choice bg-green-500 border-green-700 text-white font-bold py-4 rounded-xl w-full">MAIN LAGI</button>';
+                return;
+            }
+
+            current = idx;
+            document.getElementById('level-counter').textContent = `Level: ${current + 1} / 15`;
+            const level = levels[idx];
+            document.getElementById('visual-cue').textContent = level.cue;
+            document.getElementById('instruction-text').textContent = level.rule;
+            document.getElementById('feedback').textContent = "";
+            
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = "";
+            level.choices.forEach(choice => {
+                const btn = document.createElement('button');
+                btn.className = "btn-choice bg-white border-gray-300 text-gray-700 font-bold py-4 rounded-xl border-2 hover:bg-orange-50 shadow-sm";
+                btn.textContent = choice.text;
+                btn.onclick = () => {
+                    if(choice.correct) {
+                        document.getElementById('feedback').className = "mt-4 text-center font-bold text-green-500";
+                        document.getElementById('feedback').textContent = level.success;
+                        setTimeout(() => nextLevel(idx + 1), 1200);
+                    } else {
+                        document.getElementById('feedback').className = "mt-4 text-center font-bold text-red-500";
+                        document.getElementById('feedback').textContent = "Coba pikir lagi, pahlawan!";
+                    }
+                };
+                optionsDiv.appendChild(btn);
+            });
+        }
+    </script>
+</body>
+</html>

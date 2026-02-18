@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerbang Logika Robo - 15 Misi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap');
+        body { font-family: 'Fredoka', sans-serif; background-color: #f0fdf4; }
+        .switch { position: relative; display: inline-block; width: 60px; height: 34px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #22c55e; }
+        input:checked + .slider:before { transform: translateX(26px); }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <div class="max-w-md w-full bg-white rounded-3xl shadow-xl overflow-hidden border-t-8 border-green-500">
+        <div class="p-4 text-center bg-green-50">
+            <h1 class="text-xl font-bold text-green-700">🔌 Teknisi Robo</h1>
+            <p id="mission-counter" class="text-green-600 font-bold">Misi: 1 / 15</p>
+        </div>
+
+        <div class="p-6">
+            <div id="visual-result" class="bg-gray-100 rounded-2xl p-6 mb-6 text-center transition-all">
+                <div id="target-icon" class="text-6xl mb-2">💡</div>
+                <p id="mission-goal" class="font-bold text-gray-600">Nyalakan Lampu!</p>
+            </div>
+
+            <div id="logic-box" class="space-y-4">
+                <div class="bg-blue-50 p-3 rounded-xl text-center mb-4">
+                    <span id="gate-label" class="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold uppercase">DAN</span>
+                    <p id="logic-text" class="text-sm mt-2 text-blue-800 font-medium">Saklar A DAN Saklar B harus nyala.</p>
+                </div>
+
+                <div class="flex items-center justify-between bg-gray-50 p-4 rounded-xl border border-gray-100">
+                    <span class="font-bold text-gray-700">Saklar A</span>
+                    <label class="switch">
+                        <input type="checkbox" id="switchA" onchange="checkLogic()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="flex items-center justify-between bg-gray-50 p-4 rounded-xl border border-gray-100">
+                    <span class="font-bold text-gray-700">Saklar B</span>
+                    <label class="switch">
+                        <input type="checkbox" id="switchB" onchange="checkLogic()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="action-area" class="mt-8">
+                <button id="next-btn" disabled onclick="nextMission()" class="w-full py-4 rounded-xl bg-gray-300 text-white font-bold transition-all">CEK LOGIKA</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentMission = 0;
+        const missions = [
+            { type: 'AND', goal: 'Nyalakan Lampu!', icon: '💡' },
+            { type: 'OR', goal: 'Buka Gerbang!', icon: '⛩️' },
+            { type: 'AND', goal: 'Nyalakan Robot!', icon: '🤖' },
+            { type: 'OR', goal: 'Bunyikan Bel!', icon: '🔔' },
+            { type: 'AND', goal: 'Terbangkan Roket!', icon: '🚀' },
+            { type: 'OR', goal: 'Buka Kotak Harta!', icon: '🎁' },
+            { type: 'AND', goal: 'Jalankan Kereta!', icon: '🚂' },
+            { type: 'OR', goal: 'Siram Bunga!', icon: '🌻' },
+            { type: 'AND', goal: 'Aktifkan Tameng!', icon: '🛡️' },
+            { type: 'OR', goal: 'Nyalakan Radio!', icon: '📻' },
+            { type: 'AND', goal: 'Isi Baterai!', icon: '🔋' },
+            { type: 'OR', goal: 'Panggil Naga!', icon: '🐉' },
+            { type: 'AND', goal: 'Buka Brankas!', icon: '🔐' },
+            { type: 'OR', goal: 'Nyalakan Senter!', icon: '🔦' },
+            { type: 'AND', goal: 'MISI FINAL: Aktifkan Inti Planet!', icon: '💎' }
+        ];
+
+        function checkLogic() {
+            const a = document.getElementById('switchA').checked;
+            const b = document.getElementById('switchB').checked;
+            const mission = missions[currentMission];
+            const btn = document.getElementById('next-btn');
+            const container = document.getElementById('visual-result');
+
+            let solved = (mission.type === 'AND') ? (a && b) : (a || b);
+
+            if (solved) {
+                btn.disabled = false;
+                btn.className = "w-full py-4 rounded-xl bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform active:scale-95";
+                btn.textContent = "BERHASIL! LANJUT";
+                container.classList.add('bg-yellow-100', 'scale-105');
+            } else {
+                btn.disabled = true;
+                btn.className = "w-full py-4 rounded-xl bg-gray-300 text-white font-bold";
+                btn.textContent = "BELUM TEPAT...";
+                container.classList.remove('bg-yellow-100', 'scale-105');
+            }
+        }
+
+        function nextMission() {
+            currentMission++;
+            if (currentMission >= missions.length) {
+                document.body.innerHTML = `
+                    <div class="text-center bg-white p-10 rounded-3xl shadow-2xl">
+                        <div class="text-9xl mb-4">🏅</div>
+                        <h1 class="text-3xl font-bold text-green-600">SUPER TEKNISI!</h1>
+                        <p class="text-gray-600 mt-2">Kamu menyelesaikan 15 tantangan logika!</p>
+                        <button onclick="location.reload()" class="mt-8 px-8 py-3 bg-green-500 text-white font-bold rounded-full">MAIN LAGI</button>
+                    </div>`;
+                return;
+            }
+            
+            document.getElementById('switchA').checked = false;
+            document.getElementById('switchB').checked = false;
+            
+            const m = missions[currentMission];
+            document.getElementById('mission-counter').textContent = `Misi: ${currentMission + 1} / 15`;
+            document.getElementById('target-icon').textContent = m.icon;
+            document.getElementById('mission-goal').textContent = m.goal;
+            document.getElementById('gate-label').textContent = m.type;
+            document.getElementById('logic-text').textContent = m.type === 'AND' 
+                ? "Saklar A DAN Saklar B harus nyala." 
+                : "Saklar A ATAU Saklar B (salah satu) nyala.";
+            
+            checkLogic();
+        }
+    </script>
+</body>
+</html>
