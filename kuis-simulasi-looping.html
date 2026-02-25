@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 Misi Robot Budi: Master Looping</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+        body {
+            font-family: 'Comic Neue', cursive;
+            background-color: #e0f2fe;
+        }
+        .bounce { animation: bounce 1s infinite; }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .clap { animation: clap 0.4s infinite; }
+        @keyframes clap {
+            0% { transform: scale(1) rotate(0); }
+            50% { transform: scale(1.2) rotate(10deg); }
+            100% { transform: scale(1) rotate(0); }
+        }
+        .shake { animation: shake 0.5s infinite; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .spin { animation: spin 2s linear infinite; }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .swing { animation: swing 1.5s ease-in-out infinite; }
+        @keyframes swing {
+            0%, 100% { transform: rotate(-15deg); }
+            50% { transform: rotate(15deg); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+
+    <div id="quiz-container" class="max-w-2xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden border-4 border-blue-400">
+        <!-- Progress Bar -->
+        <div class="w-full bg-gray-200 h-4">
+            <div id="progress" class="bg-blue-500 h-4 transition-all duration-500" style="width: 0%"></div>
+        </div>
+
+        <div class="p-6">
+            <!-- Animation Stage -->
+            <div id="stage" class="w-full h-48 bg-blue-50 rounded-2xl mb-6 flex items-center justify-center border-2 border-dashed border-blue-200 relative overflow-hidden">
+                <div id="sim-element" class="text-7xl transition-all duration-500">🤖</div>
+                <div id="extra-elements" class="absolute inset-0 pointer-events-none flex items-center justify-center"></div>
+            </div>
+
+            <!-- Question Area -->
+            <div id="question-box" class="text-center">
+                <h2 id="question-number" class="text-blue-500 font-bold mb-2 text-xl">Misi 1</h2>
+                <p id="question-text" class="text-xl text-gray-800 font-bold mb-6">Memuat misi...</p>
+
+                <div id="options" class="grid grid-cols-1 gap-3">
+                    <!-- Buttons injected here -->
+                </div>
+            </div>
+
+            <!-- Feedback Area -->
+            <div id="feedback" class="hidden mt-6 p-6 rounded-2xl text-center">
+                <p id="feedback-text" class="text-xl font-bold mb-4"></p>
+                <button onclick="nextQuestion()" class="bg-blue-600 text-white px-10 py-3 rounded-full font-bold hover:bg-blue-700 shadow-lg transition">
+                    Misi Selanjutnya! 🚀
+                </button>
+            </div>
+
+            <!-- End Screen -->
+            <div id="end-screen" class="hidden text-center py-10">
+                <div class="text-8xl mb-6">🏆</div>
+                <h2 class="text-4xl font-bold text-blue-800 mb-2">Kamu Luar Biasa!</h2>
+                <p id="final-score" class="text-2xl text-gray-600 mb-8"></p>
+                <button onclick="location.reload()" class="bg-green-500 text-white px-10 py-4 rounded-full font-bold text-xl hover:bg-green-600 shadow-xl transition">
+                    Main Lagi! 🔁
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                q: 'Budi ingin bertepuk tangan 3 kali. Manakah perintah yang benar?',
+                options: ['ULANGI 3 KALI: Tepuk', 'ULANGI 1 KALI: Tepuk', 'BERHENTI: Tepuk'],
+                correct: 0,
+                sim: 'clap',
+                hint: 'Hitung: Satu, dua, tiga!'
+            },
+            {
+                q: 'Budi melompat SAMPAI baterainya habis. Ini contoh loop apa?',
+                options: ['Loop Hitungan (Angka)', 'Loop Kondisi (Syarat)', 'Bukan Loop'],
+                correct: 1,
+                sim: 'jump',
+                hint: 'Budi berhenti karena "Baterai Habis", itu sebuah kondisi.'
+            },
+            {
+                q: 'Lihat balok di layar! Berapa kali Budi harus mengulang "Ambil Balok" untuk membersihkannya?',
+                options: ['2 Kali', '4 Kali', '5 Kali'],
+                correct: 2,
+                sim: 'boxes',
+                hint: 'Coba hitung ada berapa balok kecil di sana.'
+            },
+            {
+                q: 'Jika Budi berjalan "SELAMA lampu hijau", kapan dia akan berhenti?',
+                options: ['Setelah 10 langkah', 'Saat lampu jadi merah', 'Dia tidak akan berhenti'],
+                correct: 1,
+                sim: 'walk',
+                hint: 'Loop kondisi akan berhenti jika syaratnya sudah tidak terpenuhi.'
+            },
+            {
+                q: 'Ada 4 bunga yang butuh air. Apa perintah yang paling singkat?',
+                options: ['Siram, Siram, Siram, Siram', 'ULANGI 4 KALI: Siram', 'ULANGI 1 KALI: Siram 4 kali'],
+                correct: 1,
+                sim: 'water',
+                hint: 'Looping membuat perintah panjang jadi pendek!'
+            },
+            {
+                q: 'Budi memutar baling-baling 10 kali. Sekarang baru putaran ke-8. Berapa loop lagi?',
+                options: ['2 Kali lagi', '8 Kali lagi', 'Sudah selesai'],
+                correct: 0,
+                sim: 'spin',
+                hint: '10 dikurangi 8 sama dengan...?'
+            },
+            {
+                q: 'Budi menyapu lantai SAMPAI bersih. Jika lantai sudah bersih, apakah Budi masih menyapu?',
+                options: ['Ya, selamanya', 'Tidak, dia berhenti', 'Dia malah menari'],
+                correct: 1,
+                sim: 'sweep',
+                hint: 'Kalau syarat "kotor" sudah hilang, perulangan berhenti.'
+            },
+            {
+                q: 'Budi makan 3 kue. Perintahnya: "ULANGI 3 KALI: Makan 1 kue". Apa yang terjadi kalau angka 3 diganti 0?',
+                options: ['Budi makan banyak', 'Budi tidak makan kue sama sekali', 'Budi bingung'],
+                correct: 1,
+                sim: 'eat',
+                hint: 'Ulangi 0 kali berarti tidak dilakukan.'
+            },
+            {
+                q: 'Apa nama lain dari melakukan sesuatu berulang-ulang di komputer?',
+                options: ['Looping', 'Snoozing', 'Jumping'],
+                correct: 0,
+                sim: 'thinking',
+                hint: 'Ini adalah kata yang kita pelajari hari ini!'
+            },
+            {
+                q: 'Budi menggelengkan kepala ke kiri dan kanan. Ini adalah gerakan...',
+                options: ['Satu arah', 'Berulang (Loop)', 'Sekali saja'],
+                correct: 1,
+                sim: 'shake',
+                hint: 'Gerakan kiri-kanan-kiri-kanan itu berulang.'
+            }
+        ];
+
+        let currentIdx = 0;
+        let score = 0;
+
+        function updateSim(type) {
+            const el = document.getElementById('sim-element');
+            const extras = document.getElementById('extra-elements');
+            el.className = 'text-7xl transition-all duration-500';
+            el.style.animation = '';
+            el.style.transform = '';
+            extras.innerHTML = '';
+            
+            switch(type) {
+                case 'clap':
+                    el.innerText = '👏';
+                    el.classList.add('clap');
+                    break;
+                case 'jump':
+                    el.innerText = '🤖';
+                    el.classList.add('bounce');
+                    extras.innerHTML = '<div class="absolute bottom-5 text-red-500 font-bold">🔋 Low Bat!</div>';
+                    break;
+                case 'boxes':
+                    el.innerText = '🤖';
+                    extras.innerHTML = '<div class="flex gap-1 mt-20 text-3xl">📦📦📦📦📦</div>';
+                    break;
+                case 'walk':
+                    el.innerText = '🤖';
+                    el.classList.add('shake');
+                    extras.innerHTML = '<div class="absolute top-5 right-5 w-10 h-10 bg-green-500 rounded-full border-4 border-white shadow-lg"></div>';
+                    break;
+                case 'water':
+                    el.innerText = '🚿';
+                    el.classList.add('swing');
+                    extras.innerHTML = '<div class="flex gap-2 mt-24 text-3xl">🌸🌸🌸🌸</div>';
+                    break;
+                case 'spin':
+                    el.innerText = '⚙️';
+                    el.classList.add('spin');
+                    break;
+                case 'sweep':
+                    el.innerText = '🧹';
+                    el.classList.add('swing');
+                    extras.innerHTML = '<div class="mt-20 text-2xl">✨✨✨</div>';
+                    break;
+                case 'eat':
+                    el.innerText = '😋';
+                    el.classList.add('clap');
+                    extras.innerHTML = '<div class="mt-20 text-3xl">🍪🍪🍪</div>';
+                    break;
+                case 'thinking':
+                    el.innerText = '🤔';
+                    el.classList.add('bounce');
+                    break;
+                case 'shake':
+                    el.innerText = '🤖';
+                    el.classList.add('shake');
+                    break;
+            }
+        }
+
+        function loadQuestion() {
+            const q = questions[currentIdx];
+            document.getElementById('question-number').innerText = `Misi ke-${currentIdx + 1} dari 10`;
+            document.getElementById('question-text').innerText = q.q;
+            document.getElementById('progress').style.width = `${(currentIdx / questions.length) * 100}%`;
+            
+            updateSim(q.sim);
+
+            const optContainer = document.getElementById('options');
+            optContainer.innerHTML = '';
+            q.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = "p-4 text-lg font-bold rounded-2xl border-2 border-gray-200 hover:border-blue-400 hover:bg-blue-50 transition transform active:scale-95 text-gray-700";
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(i);
+                optContainer.appendChild(btn);
+            });
+
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('question-box').classList.remove('hidden');
+        }
+
+        function checkAnswer(i) {
+            const q = questions[currentIdx];
+            const isCorrect = i === q.correct;
+            const feedback = document.getElementById('feedback');
+            const fbText = document.getElementById('feedback-text');
+
+            document.getElementById('question-box').classList.add('hidden');
+            feedback.classList.remove('hidden');
+
+            if (isCorrect) {
+                score++;
+                fbText.innerHTML = "<span class='text-5xl block mb-2'>🌟</span> HEBAT! Kamu benar!";
+                feedback.className = "mt-6 p-6 rounded-2xl text-center bg-green-100 text-green-800 border-4 border-green-400";
+            } else {
+                fbText.innerHTML = "<span class='text-5xl block mb-2'>❌</span> Ups! " + q.hint;
+                feedback.className = "mt-6 p-6 rounded-2xl text-center bg-red-100 text-red-800 border-4 border-red-400";
+            }
+        }
+
+        function nextQuestion() {
+            currentIdx++;
+            if (currentIdx < questions.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById('progress').style.width = "100%";
+            document.getElementById('stage').classList.add('hidden');
+            document.getElementById('question-box').classList.add('hidden');
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('question-number').classList.add('hidden');
+            
+            const end = document.getElementById('end-screen');
+            end.classList.remove('hidden');
+            
+            let grade = "";
+            if(score === 10) grade = "Skor Sempurna! Kamu Jenius! 💎";
+            else if(score > 7) grade = "Keren Sekali! Kamu hampir Master! ⭐";
+            else grade = "Bagus! Terus berlatih ya! 💪";
+            
+            document.getElementById('final-score').innerText = `Skor kamu: ${score} / 10\n${grade}`;
+        }
+
+        window.onload = loadQuestion;
+    </script>
+</body>
+</html>

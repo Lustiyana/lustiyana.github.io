@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan Robot Budi: 10 Tugas Ajaib</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+        body {
+            font-family: 'Comic Neue', cursive;
+            background-color: #f0f9ff;
+        }
+        .robot-bounce {
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .shake {
+            animation: shake 0.5s infinite;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div id="game-container" class="max-w-2xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden border-4 border-blue-400">
+        <!-- Header -->
+        <div class="bg-blue-600 p-4 text-white text-center">
+            <h1 class="text-2xl font-bold">🤖 Petualangan Robot Budi</h1>
+            <p id="sub-header" class="text-sm opacity-90">Misi: Selesaikan 10 Tugas Looping!</p>
+        </div>
+
+        <!-- Content Area -->
+        <div id="content" class="p-8">
+            <!-- Start Scene -->
+            <div id="scene-start" class="text-center">
+                <div class="text-6xl mb-6 robot-bounce">🤖</div>
+                <h2 class="text-3xl font-bold text-blue-800 mb-4">Ayo Bantu Budi!</h2>
+                <p class="text-lg text-gray-700 mb-6">
+                    Budi punya 10 tugas penting hari ini. Kita akan menggunakan **Loop Berhitung** (tahu jumlahnya) dan **Loop Kondisi** (sampai syarat terpenuhi).
+                </p>
+                <button onclick="nextScene('scene-1')" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-full text-xl shadow-lg transition transform hover:scale-105">
+                    Mulai Misi! 🚀
+                </button>
+            </div>
+
+            <!-- --- LOOP BERHITUNG (1-5) --- -->
+
+            <!-- Task 1: Makan Ikan -->
+            <div id="scene-1" class="hidden text-center">
+                <span class="text-blue-500 font-bold">Tugas 1 (Berhitung)</span>
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">Beri Makan 5 Ikan 🐟</h2>
+                <div class="flex justify-center gap-2 mb-6 text-4xl" id="fish-container">
+                    <span>🐟</span><span>🐟</span><span>🐟</span><span>🐟</span><span>🐟</span>
+                </div>
+                <button onclick="feedFish()" id="btn-1" class="bg-blue-500 text-white py-2 px-6 rounded-lg font-bold">Ulangi: Beri Makan</button>
+            </div>
+
+            <!-- Task 2: Ketuk Pintu -->
+            <div id="scene-2" class="hidden text-center">
+                <span class="text-blue-500 font-bold">Tugas 2 (Berhitung)</span>
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">Ketuk Pintu 3 Kali 🚪</h2>
+                <div id="door" class="text-7xl mb-6">🚪</div>
+                <p id="knock-count" class="mb-4">Ketukan: 0 / 3</p>
+                <button onclick="knockDoor()" id="btn-2" class="bg-yellow-600 text-white py-2 px-6 rounded-lg font-bold">Ulangi: Tok Tok!</button>
+            </div>
+
+            <!-- Task 3: Lompat Bintang -->
+            <div id="scene-3" class="hidden text-center">
+                <span class="text-blue-500 font-bold">Tugas 3 (Berhitung)</span>
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">Lompat 4 Kali 🤸</h2>
+                <div id="jumper" class="text-7xl mb-6">🤖</div>
+                <button onclick="jumpRobot()" id="btn-3" class="bg-green-500 text-white py-2 px-6 rounded-lg font-bold">Ulangi: Lompat!</button>
+            </div>
+
+            <!-- Task 4: Tiup Lilin -->
+            <div id="scene-4" class="hidden text-center">
+                <span class="text-blue-500 font-bold">Tugas 4 (Berhitung)</span>
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">Tiup 6 Lilin 🕯️</h2>
+                <div id="candle-container" class="flex justify-center gap-2 mb-6 text-3xl">
+                    <span>🔥</span><span>🔥</span><span>🔥</span><span>🔥</span><span>🔥</span><span>🔥</span>
+                </div>
+                <button onclick="blowCandle()" id="btn-4" class="bg-purple-500 text-white py-2 px-6 rounded-lg font-bold">Ulangi: Huuuuh!</button>
+            </div>
+
+            <!-- Task 5: Tepuk Tangan -->
+            <div id="scene-5" class="hidden text-center">
+                <span class="text-blue-500 font-bold">Tugas 5 (Berhitung)</span>
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">Tepuk Tangan 2 Kali 👏</h2>
+                <div id="clapper" class="text-7xl mb-6">🤖</div>
+                <button onclick="clapHands()" id="btn-5" class="bg-pink-500 text-white py-2 px-6 rounded-lg font-bold">Ulangi: Prok!</button>
+            </div>
+
+            <!-- --- LOOP KONDISI (6-10) --- -->
+
+            <!-- Task 6: Sapu Debu -->
+            <div id="scene-6" class="hidden text-center">
+                <span class="text-purple-500 font-bold">Tugas 6 (Kondisi)</span>
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">Sapu SELAMA Kotor 🧹</h2>
+                <div id="floor" class="flex justify-center gap-2 mb-6 text-3xl">
+                    <span class="dust">💩</span><span class="dust">💩</span><span class="dust">💩</span>
+                </div>
+                <button onclick="sweepFloor()" id="btn-6" class="bg-gray-700 text-white py-2 px-6 rounded-lg font-bold">Sapu Debu</button>
+            </div>
+
+            <!-- Task 7: Minum Susu -->
+            <div id="scene-7" class="hidden text-center">
+                <span class="text-purple-500 font-bold">Tugas 7 (Kondisi)</span>
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">Minum SELAMA Belum Habis 🥛</h2>
+                <div id="milk-glass" class="w-16 h-24 border-4 border-blue-200 mx-auto mb-6 relative overflow-hidden bg-white">
+                    <div id="milk-level" class="absolute bottom-0 w-full bg-blue-100 transition-all duration-500" style="height: 100%"></div>
+                </div>
+                <button onclick="drinkMilk()" id="btn-7" class="bg-blue-400 text-white py-2 px-6 rounded-lg font-bold">Minum Slruuup!</button>
+            </div>
+
+            <!-- Task 8: Isi Air -->
+            <div id="scene-8" class="hidden text-center">
+                <span class="text-purple-500 font-bold">Tugas 8 (Kondisi)</span>
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">Isi Air SELAMA Belum Penuh 🚰</h2>
+                <div class="w-16 h-24 border-4 border-gray-400 mx-auto mb-6 relative overflow-hidden bg-white">
+                    <div id="water-level" class="absolute bottom-0 w-full bg-blue-500 transition-all duration-500" style="height: 0%"></div>
+                </div>
+                <button onclick="fillWater()" id="btn-8" class="bg-blue-600 text-white py-2 px-6 rounded-lg font-bold">Tuang Air</button>
+            </div>
+
+            <!-- Task 9: Pompa Ban -->
+            <div id="scene-9" class="hidden text-center">
+                <span class="text-purple-500 font-bold">Tugas 9 (Kondisi)</span>
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">Pompa SELAMA Ban Kempes 🚲</h2>
+                <div id="tire" class="text-5xl mb-6 transition-all duration-300 transform scale-50">⭕</div>
+                <button onclick="pumpTire()" id="btn-9" class="bg-red-500 text-white py-2 px-6 rounded-lg font-bold">Pompa!</button>
+            </div>
+
+            <!-- Task 10: Cari Kunci -->
+            <div id="scene-10" class="hidden text-center">
+                <span class="text-purple-500 font-bold">Tugas 10 (Kondisi)</span>
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">Cari SELAMA Belum Ketemu 🔑</h2>
+                <div id="boxes" class="flex justify-center gap-2 mb-6 text-4xl">
+                    <button onclick="searchBox(0)" class="p-2 border bg-yellow-100 rounded">📦</button>
+                    <button onclick="searchBox(1)" class="p-2 border bg-yellow-100 rounded">📦</button>
+                    <button onclick="searchBox(2)" class="p-2 border bg-yellow-100 rounded">📦</button>
+                </div>
+                <p id="search-msg" class="text-gray-500 italic">Klik kotak untuk mencari!</p>
+            </div>
+
+            <!-- Conclusion/Explanation Scene -->
+            <div id="scene-summary" class="hidden">
+                <h2 class="text-3xl font-bold text-blue-800 mb-6 text-center">Apa yang Kita Pelajari? 🤔</h2>
+                
+                <div class="space-y-6 text-gray-700">
+                    <div class="bg-blue-50 p-5 rounded-2xl border-l-8 border-blue-500 shadow-sm">
+                        <h3 class="text-xl font-bold text-blue-700 mb-2">1. Loop Berhitung (For Loop)</h3>
+                        <p class="text-sm">Gunakan ini jika kamu <strong>sudah tahu pasti</strong> berapa kali harus mengulang.</p>
+                        <ul class="mt-2 text-xs space-y-1 list-disc list-inside text-blue-900">
+                            <li>Contoh: Lompat tepat 4 kali.</li>
+                            <li>Budi berhenti saat angkanya sudah tercapai.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-purple-50 p-5 rounded-2xl border-l-8 border-purple-500 shadow-sm">
+                        <h3 class="text-xl font-bold text-purple-700 mb-2">2. Loop Kondisi (While/Until Loop)</h3>
+                        <p class="text-sm">Gunakan ini jika kamu mengulang <strong>sampai sesuatu terjadi</strong> atau berubah.</p>
+                        <ul class="mt-2 text-xs space-y-1 list-disc list-inside text-purple-900">
+                            <li>Contoh: Minum sampai gelasnya kosong.</li>
+                            <li>Budi berhenti hanya jika syaratnya sudah benar (misal: sudah bersih atau sudah penuh).</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-yellow-50 p-4 rounded-xl text-center border border-yellow-200 italic text-sm">
+                        "Looping membuat kita tidak perlu menulis perintah yang sama berkali-kali. Cukup satu perintah, Budi yang mengulanginya!"
+                    </div>
+                </div>
+
+                <div class="mt-8 text-center">
+                    <button onclick="nextScene('scene-success')" class="bg-green-600 text-white py-3 px-10 rounded-full font-bold shadow-lg">
+                        Hebat! Selesaikan 🏆
+                    </button>
+                </div>
+            </div>
+
+            <!-- Success Scene -->
+            <div id="scene-success" class="hidden text-center">
+                <div class="text-7xl mb-6">🏆</div>
+                <h2 class="text-3xl font-bold text-green-600 mb-4">Misi Berhasil!</h2>
+                <p class="text-lg text-gray-700 mb-6">
+                    Kamu sudah menyelesaikan semua tantangan dan memahami rahasia Robot Budi. Sampai jumpa di petualangan berikutnya!
+                </p>
+                <button onclick="location.reload()" class="bg-blue-600 text-white py-3 px-8 rounded-full font-bold transition hover:bg-blue-700">Main Lagi 🔁</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let counts = { f:0, k:0, j:0, b:0, c:0, d:3, m:100, w:0, p:50, s:false };
+
+        function nextScene(id) {
+            document.querySelectorAll('#content > div').forEach(d => d.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function completeTask(btnId, next) {
+            const btn = document.getElementById(btnId);
+            btn.innerText = "Selesai! Lanjut ➡️";
+            btn.classList.replace(btn.classList[0], 'bg-green-600');
+            btn.onclick = () => nextScene(next);
+        }
+
+        // 1. Ikan
+        function feedFish() {
+            if(counts.f < 5) {
+                document.getElementById('fish-container').children[counts.f].innerText = '💖';
+                counts.f++;
+                if(counts.f === 5) completeTask('btn-1', 'scene-2');
+            }
+        }
+
+        // 2. Pintu
+        function knockDoor() {
+            if(counts.k < 3) {
+                counts.k++;
+                document.getElementById('door').classList.add('shake');
+                setTimeout(() => document.getElementById('door').classList.remove('shake'), 200);
+                document.getElementById('knock-count').innerText = `Ketukan: ${counts.k} / 3`;
+                if(counts.k === 3) completeTask('btn-2', 'scene-3');
+            }
+        }
+
+        // 3. Lompat
+        function jumpRobot() {
+            if(counts.j < 4) {
+                counts.j++;
+                document.getElementById('jumper').classList.add('robot-bounce');
+                setTimeout(() => document.getElementById('jumper').classList.remove('robot-bounce'), 500);
+                if(counts.j === 4) completeTask('btn-3', 'scene-4');
+            }
+        }
+
+        // 4. Lilin
+        function blowCandle() {
+            if(counts.b < 6) {
+                document.getElementById('candle-container').children[counts.b].innerText = '💨';
+                counts.b++;
+                if(counts.b === 6) completeTask('btn-4', 'scene-5');
+            }
+        }
+
+        // 5. Tepuk
+        function clapHands() {
+            if(counts.c < 2) {
+                counts.c++;
+                document.getElementById('clapper').innerText = '👏';
+                setTimeout(() => document.getElementById('clapper').innerText = '🤖', 300);
+                if(counts.c === 2) completeTask('btn-5', 'scene-6');
+            }
+        }
+
+        // 6. Sapu
+        function sweepFloor() {
+            if(counts.d > 0) {
+                counts.d--;
+                document.querySelectorAll('.dust')[counts.d].style.display = 'none';
+                if(counts.d === 0) completeTask('btn-6', 'scene-7');
+            }
+        }
+
+        // 7. Minum
+        function drinkMilk() {
+            if(counts.m > 0) {
+                counts.m -= 25;
+                document.getElementById('milk-level').style.height = counts.m + '%';
+                if(counts.m === 0) completeTask('btn-7', 'scene-8');
+            }
+        }
+
+        // 8. Isi Air
+        function fillWater() {
+            if(counts.w < 100) {
+                counts.w += 25;
+                document.getElementById('water-level').style.height = counts.w + '%';
+                if(counts.w === 100) completeTask('btn-8', 'scene-9');
+            }
+        }
+
+        // 9. Pompa
+        function pumpTire() {
+            if(counts.p < 100) {
+                counts.p += 10;
+                document.getElementById('tire').style.transform = `scale(${counts.p/100})`;
+                if(counts.p >= 100) completeTask('btn-9', 'scene-10');
+            }
+        }
+
+        // 10. Cari Kunci
+        const keyPos = Math.floor(Math.random() * 3);
+        function searchBox(idx) {
+            if(counts.s) return;
+            const boxes = document.getElementById('boxes').children;
+            if(idx === keyPos) {
+                boxes[idx].innerText = '🔑';
+                counts.s = true;
+                document.getElementById('search-msg').innerText = "Ketemu! Klik tombol di bawah.";
+                const btn = document.createElement('button');
+                btn.className = "mt-4 bg-blue-600 text-white py-2 px-6 rounded-lg font-bold";
+                btn.innerText = "Selesaikan Misi ➡️";
+                btn.onclick = () => nextScene('scene-summary');
+                document.getElementById('scene-10').appendChild(btn);
+            } else {
+                boxes[idx].innerText = '❌';
+                document.getElementById('search-msg').innerText = "Belum ada, cari lagi!";
+            }
+        }
+    </script>
+</body>
+</html>
